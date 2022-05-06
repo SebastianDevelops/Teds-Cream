@@ -1,0 +1,32 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block custom_style %}<link rel="stylesheet" type="text/css" href="{% static 'css/product-styles.css' %}">{% endblock custom_style %}
+{% block content %}
+<div class="container">
+
+    
+    <div class="row">
+        {% for products in product %}
+        <div class="col-md-3 col-sm-6">
+            <div class="product-grid">
+                <div class="product-content">
+                    <h3 class="title"><a href="{% url 'product_detail' products.slug %}">{{products.title}}</a></h3>
+                    <div class="price">{{products.price}}</div>
+                </div>
+
+                <div class="product-image">
+                    <a href="{% url 'product_detail' products.slug %}" class="image">
+                        <img class="pic-1" src="{{ products.image.url }}">
+                        <img class="pic-2" src="{{ products.image.url }}">
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        
+        {% endfor %}
+    </div>
+    
+
+</div>
+{% endblock content %}

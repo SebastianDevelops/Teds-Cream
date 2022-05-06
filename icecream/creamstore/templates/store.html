@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+        <title>TED's Cream</title>
+         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+         <link rel="preconnect" href="https://fonts.googleapis.com">
+         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+         <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+         <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+         <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/froala-design-blocks/1.0.2/css/froala_blocks.min.css">
+         <link rel="stylesheet" type="text/css" href="{% static 'css/store.css' %}">
+         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+         <!-- below js code is used to check if a user is logged in or not-->
+<!-- if he isn't, then value returned is 'AnonymousUser' -->
+	<script type="text/javascript">
+    var user = '{{request.user}}'
+      function getToken(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              var cookies = document.cookie.split(';');
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = cookies[i].trim();
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+      var csrftoken = getToken('csrftoken')
+
+      function getCookie(name) {
+          // Split cookie string and get all individual name=value pairs in an array
+          var cookieArr = document.cookie.split(";");
+
+          // Loop through the array elements
+          for(var i = 0; i < cookieArr.length; i++) {
+              var cookiePair = cookieArr[i].split("=");
+
+              /* Removing whitespace at the beginning of the cookie name
+              and compare it with the given string */
+              if(name == cookiePair[0].trim()) {
+                  // Decode the cookie value and return
+                  return decodeURIComponent(cookiePair[1]);
+              }
+          }
+
+          // Return null if not found
+          return null;
+      }
+    var cart = JSON.parse(getCookie('cart'))
+
+    if(cart == undefined){
+      cart = {}
+      console.log('Cart Created!')
+      document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+    }
+    console.log('Cart:', cart)
+</script>
+</head>
+<body>
+
+
+    <header class="bg-transparent">
+        <div class="container">
+          <nav class="navbar fixed-top navbar-expand-md">
+            <a class="navbar-brand" href="{% url "home" %}">
+              <img src="{% static "images/logo.png"%}" height="80" width="150" alt="logo">
+            </a>
+      
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav11" aria-controls="navbarNav11" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+      
+            <div class="collapse navbar-collapse" id="navbarNav11">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'home' %}">Store <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'product_list' %}">Ice Creams</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'cart' %}">Cart</a>
+                </li>
+              </ul>
+              <div class="form-inline my-2 my-lg-0">
+
+                <a href="{% url 'cart' %}">
+                 <img  id="cart-icon" src="{% static 'images/cart.png' %}">
+               </a>
+               <p id="cart-total">{{ cartItems }}</p>
+       
+             </div>
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      
+      <div class="jumbotron jumbotron-fluid header bg-info">
+        <div class="container jumbo-content">
+          <h1>SERVING<span class="jumbo-content-color">
+            UNFORGETTABLE</span> 
+            TASTE</h1>
+          <p>For Every Ice Cream Bought R1 Goes To Charity </p>
+      </div>
+    </div>
+    
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Water Based <b>Popsicles</b></h2>
+          <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0"> 
+          <!-- Wrapper for carousel items -->
+          
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="row">
+                {% for flavor in water_based|slice:"0:4" %}
+                <div class="col-sm-3">
+                  <div class="thumb-wrapper">
+                    <div class="img-box">
+                      <img src="{{ flavor.image.url }}" class="img-fluid" alt="">
+                    </div>
+                    <div class="thumb-content">
+                      <h4>{{ flavor.title }}</h4>
+                      <p class="item-price"><span>R{{ flavor.price }}</span></p>
+                      <a href="{% url "product_list" %}" class="btn btn-primary">See All</a>
+                    </div>						
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+
+                <div class="container">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h2>Milk Based <b>Popsicles</b></h2>
+                      <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
+                      <!-- Wrapper for carousel items -->
+                      
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="row">
+                            {% for flavor in milk_based|slice:"0:4" %}
+                            <div class="col-sm-3">
+                              <div class="thumb-wrapper">
+                                <div class="img-box">
+                                  <img src="{{ flavor.image.url }}" class="img-fluid" alt="">
+                                </div>
+                                <div class="thumb-content">
+                                  <h4>{{ flavor.title }}</h4>
+                                  <p class="item-price"><span>R{{ flavor.price }}</span></p>
+                                  
+                                  <a href="{% url "product_list" %}" class="btn btn-primary">See All</a>
+                                  
+                                </div>						
+                              </div>
+                            </div>
+                            {% endfor %}
+                          </div>
+                          </div>
+                          </div>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                            
+                            
+                
+
+      
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Mexican Styled <b>Popsicles</b></h2>
+          <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0"> 
+          <!-- Wrapper for carousel items -->
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="row">
+                {% for flavor in paleta|slice:"0:4" %}
+                <div class="col-sm-3">
+                  <div class="thumb-wrapper">
+                    <div class="img-box">
+                      <img src="{{flavor.image.url}}" class="img-fluid" alt="">
+                    </div>
+                    <div class="thumb-content">
+                      <h4>{{flavor.title}}</h4>
+                      <p class="item-price"><span>R{{flavor.price}}</span></p>
+                      
+                      <a href="{% url "product_list" %}" class="btn btn-primary">See All</a>
+                    </div>						
+                  </div>
+                </div>
+                {% endfor %}
+                    </div>						
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Ice Cream <b>Tubs</b></h2>
+          <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">   
+          <!-- Wrapper for carousel items -->
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="row">
+                {% for flavor in tub|slice:"0:4" %}
+                <div class="col-sm-3">
+                  <div class="thumb-wrapper">
+                    <div class="img-box">
+                      <img src="{{flavor.image.url}}" class="img-fluid" alt="">
+                    </div>
+                    <div class="thumb-content">
+                      <h4>{{flavor.title}}</h4>
+                      <p class="item-price"><span>R{{flavor.price}}</span></p>
+                      
+                      <a href="#" class="btn btn-primary">See All</a>
+                    </div>						
+                  </div>
+                </div>
+                {% endfor %}
+                    </div>						
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity=
+        "sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity=
+        "sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        
+<script src="{% static 'js/cart.js' %}"></script>
+
+</body>
+</html>

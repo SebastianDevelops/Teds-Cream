@@ -1,0 +1,50 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block custom_style %}<link rel="stylesheet" href="{% static 'css/product_detail_styles.css' %}" {% endblock custom_style %}
+
+{% block content %}
+<div class="container">
+    <div class="col-md-12">
+    <section class="panel">
+          <div class="panel-body">
+              <div class="col-md-6">
+                  <div class="pro-img-details">
+                      <img src="{{ product.image.url }}" alt="">
+                  </div>
+                  <div class="pro-img-list">
+                      <a href="#">
+                          <img src="{{ product.image.thumbnail.url }}" alt="">
+                      </a>
+                      <a href="#">
+                          <img src="" alt="">
+                      </a>
+                      <a href="#">
+                          <img src="" alt="">
+                      </a>
+                      <a href="#">
+                          <img src="" alt="">
+                      </a>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <h4 class="pro-d-title">
+                      <a href="#" class="">
+                          {{ product.title }}
+                      </a>
+                  </h4>
+                  <p>
+                     {{ product.description }}
+                  </p>
+                  <div class="product_meta">
+                      <span class="posted_in"> <strong>Flavor:</strong> <a rel="tag" href="#">{{product.category}}</a>.</span>
+                  </div>
+                  <div class="m-bot15"> <strong>Price: </strong>   <span class="pro-price"> R{{ product.price|floatformat:2 }}</span></div>
+                  <p>
+                    <button data-product={{product.id}} data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+                  </p>
+              </div>
+          </div>
+      </section>
+      </div>
+      </div>
+      {% endblock content %}

@@ -1,0 +1,9 @@
+<!DOCTYPE HTML>
+<html>
+    <ul>
+        <li>Order From: {{customer}}</li>
+        <li>{{customer}} Location Is: {{content}}</li>
+        <li>{{customer}}'s Order Contains: {{items.product.name}}, Quantity:{{items.product.quantity}} Price: {{items.product.price}}, Total{{items.product.get_total}}</li>
+        <li>{{customer}}'s Total Is: {{items.order.get_cart_items}}</li>
+    </ul>
+</html>
